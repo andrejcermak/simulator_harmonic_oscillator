@@ -11,7 +11,7 @@ class Animation:
         self.line1 = self.canvas.create_line(250,545,650,545, fill="red")
         self.line2 = self.canvas.create_line(250,400,650,400, fill="black")
 
-    def animate(self):
+    def animate_harmonic(self):
         posx=0.1
         xspeed=0.1
         i=0
@@ -46,3 +46,44 @@ class Animation:
             time.sleep(0.0001)
 
         root.mainloop()
+
+
+    def animate_non_harmonic(self):
+        posx = 0.1
+        xspeed = 0.1
+        i = 0
+        m = 1
+        u = -20
+        k = 0.03
+        g = 9.81
+        rho = 0.01
+        S = 5
+        C = 0.4
+        d_t = 0.01
+        t = 0
+        v = 0
+        Fg = m * g
+        F = k * u
+        Fo = rho * S * v * v * C / 2
+        a = F / m
+        max_u = 0
+        pos = self.canvas.coords(self.object)
+        for i in range(0, 1000000):
+            u2 = u
+            if u2 > max_u:
+                max_u = u2
+                print(pos[3])
+            v = v + a * d_t
+            u = u - v * d_t
+            F = k * u
+            if (v < 0):
+                F = (F + Fo);
+            else:
+                F = F - Fo;
+            Fo = rho * S * v * v * C / 2;
+            a = F / m
+            t = t + d_t
+
+            self.canvas.move(self.object, 0, 7 * (u - u2))
+            self.root.update()
+            time.sleep(0.0000001)
